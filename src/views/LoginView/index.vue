@@ -10,7 +10,8 @@
     <!-- 右侧登录区域 -->
     <div class="login-section">
       <div class="login-container">
-        <h2>{{ $t('login.title') }}</h2>
+        <h2>{{ // noinspection TypeScriptUnresolvedReference
+        $t('login.title') }}</h2>
         <LoginForm />
       </div>
     </div>
