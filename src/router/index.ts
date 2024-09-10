@@ -54,9 +54,15 @@ router.beforeEach((to, from, next) => {
     // 如果没有登录状态，重定向到登录页面
     next({ name: 'Login' });
   } else {
-    // 已登录或者不需要登录的页面，允许继续访问
-    console.log("检查token有效性")
-    next();
+
+    if(to.name === 'Login' && getStorage('access_token')){
+      next({ name: 'Home' });
+    }
+    else{
+      // 已登录或者不需要登录的页面，允许继续访问
+      console.log("检查token有效性")
+      next();
+    }
   }
 });
 

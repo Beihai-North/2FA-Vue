@@ -66,7 +66,7 @@ export default defineComponent({
             // 登录成功后跳转
             router.push('/');
           } catch (error) {
-            console.error('登录失败:', error);
+            console.error('登录失败', error.message);
           } finally {
             loading.value = false;
           }

@@ -8,7 +8,6 @@ export const Register_Response = (data: RegisterRequest): Promise<ApiResponse> =
 
 // 用户登录 API
 export const Login_Response = (data:AuthRequest): Promise<ApiResponse> => {
-  console.log(data)
   return axios.post('login/', data)
 }
 

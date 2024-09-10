@@ -76,11 +76,9 @@ export const useAuthStore = defineStore('auth', () => {
       // 保存 token 和用户信息
       setToken(RefreshToken,AccessToken);
       // setUser(userInfo);
-
-      // 跳转到首页
-      window.location.href = '/';
+      ElMessage.success(`登录成功！`);
     } catch (error) {
-      console.error('登录失败:', error);
+      ElMessage.error('登录失败，请检查用户名或密码');
       throw new Error('登录失败，请检查用户名或密码');
     }
   };

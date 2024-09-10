@@ -11,6 +11,7 @@ declare module 'vue' {
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
+    ElLink: typeof import('element-plus/es')['ElLink']
     FooterComponent: typeof import('./src/components/FooterComponent/index.vue')['default']
     HeaderComponent: typeof import('./src/components/HeaderComponent/index.vue')['default']
     IconCommunity: typeof import('./src/components/icons/IconCommunity.vue')['default']

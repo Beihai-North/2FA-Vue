@@ -32,7 +32,7 @@
     />
     <SubmitButton
       :loading="loading"
-      :label="('login.submit')"
+      :label="('register.submit')"
       @submit="handleSubmit"
     />
   </el-form>
