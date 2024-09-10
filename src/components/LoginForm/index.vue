@@ -15,7 +15,11 @@
       prefix-icon="el-icon-lock"
       prop="password"
     />
-    <el-button type="primary" :loading="loading" @click="handleSubmit">登录</el-button>
+    <SubmitButton
+      :loading="loading"
+      :label="('login.submit')"
+      @submit="handleSubmit"
+    />
   </el-form>
 </template>
 
@@ -24,10 +28,11 @@ import { defineComponent, ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import InputField from '@/components/InputField/index.vue';
+import SubmitButton from '@/components/SubmitButton/index.vue'
 
 export default defineComponent({
   name: 'LoginForm',
-  components: { InputField },
+  components: { InputField,SubmitButton },
   setup() {
     const form = ref({
       username: '',
@@ -51,12 +56,10 @@ export default defineComponent({
     };
 
     const handleSubmit = () => {
-      <!--suppress TypeScriptUnresolvedReference -->
       loginFormRef.value.validate(async (valid: boolean) => {
         if (valid) {
           loading.value = true;
           console.log('表单验证通过');
-
           try {
             // 调用登录方法
             await authStore.login(form.value.username, form.value.password);

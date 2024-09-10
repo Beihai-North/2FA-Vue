@@ -42,7 +42,7 @@ export const useAuthStore = defineStore('auth', () => {
       // 弹出成功消息，显示邮箱和用户名
       ElMessage.success(`注册成功！邮箱: ${registeredEmail}, 用户名: ${registeredUsername}`);
 
-      router.push('/login');
+      router.push('/');
 
     } catch (error) {
       const err = error as AxiosError;  // 使用 AxiosError 类型
