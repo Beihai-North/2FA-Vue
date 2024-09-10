@@ -2,7 +2,7 @@ import axios from '@/http/axios';
 import { RegisterRequest, AuthRequest, Verify2FARequest, ApiResponse } from '@/api/auth/types';
 
 // 用户注册 API
-export const register = (data: RegisterRequest): Promise<ApiResponse> => {
+export const Register_Response = (data: RegisterRequest): Promise<ApiResponse> => {
   return axios.post('register/', data);
 };
 

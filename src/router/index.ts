@@ -35,7 +35,7 @@ const routes = [
       {
         path: 'register',
         name: 'Register',
-        component: () => import('@/views/LoginView/index.vue') // 注册页面内容
+        component: () => import('@/views/RegisterView/index.vue') // 注册页面内容
       }
     ]
   }

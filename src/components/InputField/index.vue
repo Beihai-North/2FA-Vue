@@ -1,7 +1,9 @@
 <template>
-  <el-form-item :label="$t(label)">
+  <!--suppress TypeScriptUnresolvedReference -->
+  <el-form-item :label="$t(label)" :prop="prop">
+    <!--suppress TypeScriptUnresolvedReference -->
     <el-input
-      v-model="inputValue"
+      v-model="internalValue"
       :placeholder="$t(placeholder)"
       :type="type"
       :prefix-icon="prefixIcon"
@@ -10,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, computed } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 
 export default defineComponent({
   name: 'InputField',
@@ -35,27 +37,35 @@ export default defineComponent({
       type: String,
       default: '',
     },
+    prop: {
+      type: String,
+      default: '', // 用于传递 el-form-item 的 prop，用于验证
+    },
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
-    const { modelValue } = toRefs(props);
+    const internalValue = ref(props.modelValue);
 
-    const inputValue = computed({
-      get() {
-        return modelValue.value;
-      },
-      set(value: string) {
-        emit('update:modelValue', value);
-      },
+    // 实时监听 modelValue 的变化并更新 internalValue
+    watch(
+      () => props.modelValue,
+      (newValue) => {
+        internalValue.value = newValue;
+      }
+    );
+
+    // 监听 internalValue 的变化并更新父组件的 modelValue
+    watch(internalValue, (newValue) => {
+      emit('update:modelValue', newValue);
     });
 
     return {
-      inputValue,
+      internalValue,
     };
   },
 });
 </script>
-
+<!--suppress CssUnusedSymbol -->
 <style scoped>
 .el-form-item {
   margin-bottom: 20px;
