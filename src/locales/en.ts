@@ -33,4 +33,32 @@ export default {
       passwordMismatch: 'The two passwords do not match',
     },
   },
+  header: {
+    logoAlt: 'Logo',
+    welcomeText: 'Welcome',
+    navigationLinks: {
+      home: 'Home',
+      about: 'About Us',
+      services: 'Services',
+      contact: 'Contact Us',
+      blog: 'Blog'
+    }
+  },
+  footer: {
+    copyright: '© 2024 My Website. All rights reserved.',
+    privacyPolicy: 'Privacy Policy',
+    termsOfService: 'Terms of Service',
+    cookiePolicy: 'Cookie Policy',
+    contactInfo: {
+      phone: 'Phone: +1 123 456 7890',
+      email: 'Email: support@example.com',
+      address: 'Address: 123 Main St, City, Country'
+    },
+    socialLinks: {
+      facebook: 'Facebook',
+      twitter: 'Twitter',
+      github: 'GitHub'
+    },
+    icp: 'ICP License: XXXXXXXX'
+  },
 };

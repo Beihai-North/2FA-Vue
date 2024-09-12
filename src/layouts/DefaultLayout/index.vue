@@ -1,17 +1,20 @@
 <template>
-  <div class="layout">
-    <header>
-      <HeaderComponent /> <!-- 头部部分 -->
-    </header>
+  <el-container class="layout">
+    <!-- Header 部分 -->
+    <el-header class="header">
+      <HeaderComponent />
+    </el-header>
 
-    <main>
-      <router-view /> <!-- 这里是动态内容，根据路由渲染不同的页面 -->
-    </main>
+    <!-- Main 内容部分 -->
+    <el-main class="main">
+      <router-view />
+    </el-main>
 
-    <footer>
-      <FooterComponent /> <!-- 底部部分 -->
-    </footer>
-  </div>
+    <!-- Footer 底部部分 -->
+    <el-footer class="footer">
+      <FooterComponent />
+    </el-footer>
+  </el-container>
 </template>
 
 <script setup lang="ts">
@@ -21,30 +24,40 @@ import FooterComponent from '@/components/FooterComponent/index.vue';
 </script>
 
 <style scoped>
-/* 这个布局的整体样式 */
+/* 整体布局样式 */
 .layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh; /* 确保页面高度至少填满浏览器窗口 */
 }
 
-header {
+.header {
   background-color: #007bff;
   color: white;
-  padding: 1rem;
   text-align: center;
+  line-height: 60px; /* 调整Header的高度 */
+  padding: 0 2rem; /* 调整内边距，留出更多的空间 */
 }
 
-main {
+.main {
   flex: 1;
   padding: 2rem;
-  background-color: #f8f9fa; /* 主内容区域 */
+  background-color: #f8f9fa; /* 设置主内容区域的背景色 */
 }
 
-footer {
+.footer {
   background-color: #343a40;
-  color: white;
-  text-align: center;
-  padding: 1rem;
+}
+
+/* 响应式设计：在较小屏幕设备上优化显示效果 */
+@media (max-width: 768px) {
+  .header, .footer {
+    padding: 0.5rem 1rem;
+    line-height: 50px;
+  }
+
+  .main {
+    padding: 1rem;
+  }
 }
 </style>

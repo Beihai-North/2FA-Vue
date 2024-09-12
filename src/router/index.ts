@@ -55,7 +55,7 @@ router.beforeEach((to, from, next) => {
     next({ name: 'Login' });
   } else {
 
-    if(to.name === 'Login' && getStorage('access_token')){
+    if(to.name === 'Login' || to.name==='Register' && getStorage('access_token')){
       next({ name: 'Home' });
     }
     else{
