@@ -34,7 +34,7 @@
         <p>John Doe</p>
       </div>
       <div class="drawer-right">
-        <el-button class="switch-account">
+        <el-button class="switch-account" @click="onSwitchAccounts">
           <el-icon><Switch /></el-icon>
         </el-button>
         <el-button type="danger" class="close-drawer" @click="onDrawerClose">
@@ -56,6 +56,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import { Switch, Close } from '@element-plus/icons-vue';
+import { ElMessageBox } from 'element-plus'
 
 export default defineComponent({
   name: 'HeaderComponent',
@@ -76,6 +77,16 @@ export default defineComponent({
     const onDrawerClose = () => {
       console.log('Drawer closed');
       isDrawerVisible.value = false;
+    };
+
+    const onSwitchAccounts = () => {
+      ElMessageBox.confirm('你真的要切换账号吗？', '切换账号', {
+        confirmButtonText: 'Switch',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+      }).then(() => {
+        console.log('切换账号中·····');
+      });
     };
 
     // 菜单项
@@ -100,6 +111,7 @@ export default defineComponent({
       openDrawer,
       onDrawerClose,
       menuItems,
+      onSwitchAccounts,
     };
   },
 });
