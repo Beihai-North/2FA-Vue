@@ -1,44 +1,51 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import DefaultLayout from '@/layouts/DefaultLayout/index.vue';
 import AuthLayout from '@/layouts/AuthLayout/index.vue';
-import { getStorage } from '@/utils/storage'
+import { getStorage } from '@/utils/storage';
 
 // 定义路由配置
-const routes = [
+export const routes = [
   {
     path: '/',
-    component: DefaultLayout,  // 使用 DefaultLayout 布局
+    component: DefaultLayout,
     children: [
       {
         path: '',
         name: 'Home',
-        component: () => import('@/views/Home/index.vue'), // 首页内容
-        meta: { requiresAuth: true } // 需要登录才能访问
+        component: () => import('@/views/Home/index.vue'),
+        meta: { requiresAuth: true }
       },
       {
         path: 'about',
         name: 'About',
-        component: () => import('@/views/About/index.vue'), // 关于页面内容
-        meta: { requiresAuth: true } // 需要登录才能访问
+        component: () => import('@/views/About/index.vue'),
+        meta: { requiresAuth: true }
+      },
+      // 通配符路由，用于捕捉未找到的路由
+      {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: () => import('@/views/NotFoundView/index.vue'),
+        meta: { requiresAuth: false }
       }
     ]
   },
   {
     path: '/auth',
-    component: AuthLayout,  // 使用 AuthLayout 布局
+    component: AuthLayout,
     children: [
       {
         path: 'login',
         name: 'Login',
-        component: () => import('@/views/LoginView/index.vue') // 登录页面内容
+        component: () => import('@/views/LoginView/index.vue')
       },
       {
         path: 'register',
         name: 'Register',
-        component: () => import('@/views/RegisterView/index.vue') // 注册页面内容
+        component: () => import('@/views/RegisterView/index.vue')
       }
     ]
-  }
+  },
 ];
 
 // 创建并导出路由
@@ -48,22 +55,18 @@ const router = createRouter({
 });
 
 // 全局路由守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   // 检查目标路由是否需要登录
   if (to.meta.requiresAuth && !getStorage('access_token')) {
-    // 如果没有登录状态，重定向到登录页面
-    next({ name: 'Login' });
+    next({ name: 'Login' }) // 重定向到登录页面
   } else {
-
-    if(to.name === 'Login' || to.name==='Register' && getStorage('access_token')){
-      next({ name: 'Home' });
-    }
-    else{
-      // 已登录或者不需要登录的页面，允许继续访问
-      console.log("检查token有效性")
-      next();
+    if ((to.name === 'Login' || to.name === 'Register') && getStorage('access_token')) {
+      next({ name: 'Home' })
+    } else {
+      console.log('检查token有效性')
+      next() // 允许继续访问
     }
   }
-});
+})
 
 export default router;

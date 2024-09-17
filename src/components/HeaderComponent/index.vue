@@ -43,9 +43,14 @@
       </div>
     </div>
 
-    <el-menu default-active="1" class="el-menu-vertical">
-      <template v-for="(item, index) in menuItems" :key="index">
-        <el-menu-item :index="index.toString()" class="custom-menu-item">{{ item.label }}</el-menu-item>
+    <!-- 渲染菜单 -->
+    <!-- 启用 router 模式 -->
+    <el-menu default-active="1" class="el-menu-vertical" :router="true">
+      <template v-for="(item, index) in menuItems" :key="item.id">
+        <!-- 使用 item.route 作为 index，自动处理路由跳转 -->
+        <el-menu-item :index="item.route" class="custom-menu-item">
+          {{ item.name }}
+        </el-menu-item>
         <el-divider v-if="item.divider" style="margin: 10px 0;" />
       </template>
     </el-menu>
@@ -54,9 +59,10 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref ,onMounted} from 'vue';
 import { Switch, Close } from '@element-plus/icons-vue';
 import { ElMessageBox } from 'element-plus'
+import { useMenuStore } from '@/stores/menu/index.ts'
 
 export default defineComponent({
   name: 'HeaderComponent',
@@ -67,6 +73,11 @@ export default defineComponent({
   setup() {
     // 控制抽屉是否显示
     const isDrawerVisible = ref(false);
+
+    // 使用 Pinia Store
+    const menuStore = useMenuStore();
+
+    const menuItems = ref([])
 
     // 打开抽屉
     const openDrawer = () => {
@@ -81,30 +92,19 @@ export default defineComponent({
 
     const onSwitchAccounts = () => {
       ElMessageBox.confirm('你真的要切换账号吗？', '切换账号', {
-        confirmButtonText: 'Switch',
-        cancelButtonText: 'Cancel',
+        confirmButtonText: '切换',
+        cancelButtonText: '取消',
         type: 'warning',
       }).then(() => {
         console.log('切换账号中·····');
       });
     };
 
-    // 菜单项
-    const menuItems = ref([
-      { label: '设置状态', divider: true },
-      { label: '个人资料', divider: false },
-      { label: '账户设置', divider: false },
-      { label: '安全设置', divider: true },
-      { label: '帮助与反馈', divider: false },
-      { label: '关于我们', divider: false },
-      { label: '联系我们', divider: true },
-      { label: '仓库', divider: false },
-      { label: '你的项目', divider: false },
-      { label: '你的星星', divider: true },
-      { label: '功能预览', divider: false },
-      { label: '设置', divider: false },
-      { label: '退出登录', divider: false },
-    ]);
+    // 在组件挂载时获取菜单数据
+    onMounted( () => {
+      menuStore.fetchMenuItemsAndAddRoutes();  // 从 Pinia Store 中获取菜单数据
+      menuItems.value = menuStore.menuItems;
+    });
 
     return {
       isDrawerVisible,
