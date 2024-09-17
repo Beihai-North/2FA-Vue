@@ -27,7 +27,7 @@
     <div class="drawer-content">
       <div class="drawer-left">
         <img
-          src="https://avatars.githubusercontent.com/u/70597799?v=4"
+          src="@/assets/70597799.jpg"
           alt="User Avatar"
           class="drawer-avatar"
         />
@@ -102,7 +102,6 @@ export default defineComponent({
 
     // 在组件挂载时获取菜单数据
     onMounted( () => {
-      menuStore.fetchMenuItemsAndAddRoutes();  // 从 Pinia Store 中获取菜单数据
       menuItems.value = menuStore.menuItems;
     });
 

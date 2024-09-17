@@ -7,6 +7,7 @@ import { getStorage } from '@/utils/storage';
 export const routes = [
   {
     path: '/',
+    name: 'DefaultLayout',
     component: DefaultLayout,
     children: [
       {

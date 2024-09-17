@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { type MenuItem, MenuList } from './types'
-import router, { routes } from '@/router' // 引入 router 和 routes
+import router from '@/router' // 引入 router 和 routes
 
 export const useMenuStore = defineStore('menu', {
   state: () => ({
@@ -12,7 +12,7 @@ export const useMenuStore = defineStore('menu', {
       // 动态导入组件，返回一个 Promise
       try {
         const module = await import(`@/views/${componentName}/index.vue`)
-        return module
+        return module.default || module;
       } catch (error) {
         console.log(`不存在的组件: ${componentName}`)
         // 可以返回一个备用的组件，或者抛出错误
@@ -167,27 +167,13 @@ export const useMenuStore = defineStore('menu', {
 
       // 动态添加路由
       mockMenuItems.forEach((item: MenuItem) => {
-        router.addRoute({
-          path: '/', // 父路由的路径
-          component: () => import('@/layouts/DefaultLayout/index.vue'),
-          children: [
-            {
-              path: item.route, // 动态路由
-              name: item.name,
-              component: this.loadComponent(item.component), // 动态懒加载组件
-              meta: { requiresAuth: true },
-            }
-          ]
-        })
-
-        // routes[0].children.push({
-        //   path: item.route, // 动态路由
-        //   name: item.name,
-        //   component: () => this.loadComponent(item.component), // 将Promise包裹在函数中返回
-        //   meta: { requiresAuth: true },
-        // })
-
-        // 确保动态加载的组件是一个函数，而不是直接返回组件
+        // 手动将路由同步到 Vue Router 实例
+        router.addRoute('DefaultLayout', {
+          path: item.route,
+          name: item.name,
+          component: () => this.loadComponent(item.component), // 确保是懒加载函数
+          meta: { requiresAuth: true }
+        });
       })
     }
   }

@@ -9,7 +9,8 @@ import router from './router'
 import i18n from './i18n';  // vue-i18n 配置
 import ElementPlusConfig from './element-plus'; // 引入 Element Plus 配置
 import 'element-plus/dist/index.css';
-import { getStorage } from '@/utils/storage'  // 导入 Element Plus 的默认样式
+import { getStorage } from '@/utils/storage'
+import { useMenuStore } from '@/stores/menu'  // 导入 Element Plus 的默认样式
 const app = createApp(App)
 
 
@@ -23,7 +24,9 @@ app.use(i18n);  // 配置 vue-i18n
 // 根据用户的语言偏好，动态加载 Element Plus 的语言包
 app.use(ElementPlusConfig, savedLanguage);
 
-app.use(createPinia())
-app.use(router)
+app.use(createPinia());  // 配置 Pinia
 
-app.mount('#app')
+const menuStore = useMenuStore(); // 初始化菜单 store
+menuStore.fetchMenuItemsAndAddRoutes().then(() => {
+  app.use(router).mount('#app'); // 确保在应用启动前已经添加路由
+});
