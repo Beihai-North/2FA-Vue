@@ -45,7 +45,7 @@
 
     <!-- 渲染菜单 -->
     <!-- 启用 router 模式 -->
-    <el-menu default-active="1" class="el-menu-vertical" :router="true">
+    <el-menu default-active="1" class="el-menu-vertical" :router="true" @select="onDrawerClose">
       <template v-for="(item, index) in menuItems" :key="item.id">
         <!-- 使用 item.route 作为 index，自动处理路由跳转 -->
         <el-menu-item :index="item.route" class="custom-menu-item">
