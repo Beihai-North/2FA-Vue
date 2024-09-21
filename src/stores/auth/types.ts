@@ -11,3 +11,4 @@ export const fieldMapping: Record<string, string> = {
   "email": "电子邮件",
   // 可以继续添加更多映射
 };
+

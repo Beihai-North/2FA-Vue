@@ -1,15 +1,25 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { getStorage, setStorage, removeStorage } from '@/utils/storage';
-import { Login_Response, Register_Response } from '@/api/auth'
+import {
+  Login_Response,
+  Register_Response,
+  enable2FA_Response,
+  verify2FA_Response,
+  status2FA_Response,
+  logout_Response
+} from '@/api/auth'
 import { ElMessage } from 'element-plus'
 import { fieldMapping } from '@/stores/auth/types';  // 导入字段映射
-import { AxiosError } from 'axios';  // 导入 axios 的错误类型
+import { AxiosError } from 'axios';
+import { MenuList } from '@/stores/menu/types'  // 导入 axios 的错误类型
 
 export const useAuthStore = defineStore('auth', () => {
   const refresh_token = ref<string | null>(getStorage('refresh_token'));  // 从 localStorage 初始化 token
   const access_token = ref<string | null>(getStorage('access_token'));  // 从 localStorage 初始化 token
+  const status_2FA = ref<boolean | null>(null);  // 存储2FA状态
   // const user = ref<object | null>(null); // 存储登录用户信息
+  // const QRcode = ref<string | null>(null);  // 存储2FA二维码
 
   // 设置 token 并保存到 localStorage
   const setToken = (RefreshToken: string,AccessToken:string) => {
@@ -84,12 +94,50 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   // 登出方法
-  const logout = () => {
-    refresh_token.value = null;
-    access_token.value = null;
-    removeStorage('token');
-    window.location.href = 'login';  // 跳转到登录页
+  const logout = async (router:any) => {
+    try {
+      await logout_Response({refresh:refresh_token.value});
+      refresh_token.value = null;
+      access_token.value = null;
+      removeStorage('access_token');
+      removeStorage('refresh_token');
+      ElMessage.success('已退出登录');
+      router.push('/');
+    }catch(error){
+      console.log('注销失败:', error);
+    }
   };
+
+  const enable2FA = async () => {
+    try{
+      const response = await enable2FA_Response()
+      return response
+    }catch(error){
+      console.log('启用2FA失败:', error);
+    }
+  }
+
+  const verify2FA = async (otp: string, username: string) => {
+    try {
+      const response = await verify2FA_Response({
+        otp: otp,
+        username: username
+      });
+      return Promise.resolve(response);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  const status2FA = async () => {
+    try {
+      const response = await status2FA_Response();
+      status_2FA.value = response.status;
+      return response;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 
   return {
     refresh_token,
@@ -97,5 +145,9 @@ export const useAuthStore = defineStore('auth', () => {
     register,
     login,
     logout,
+    enable2FA,
+    verify2FA,
+    status2FA,
+    status_2FA
   };
 });

@@ -19,7 +19,7 @@
     </div>
 
     <!-- 注销所有帐户 -->
-    <el-button class="logout-all-button" type="text" @click="logoutAll">
+    <el-button class="logout-all-button" @click="logoutAll">
       从所有帐户注销
     </el-button>
   </div>
@@ -28,6 +28,8 @@
 <script>
 import { ref } from 'vue';
 import avatarImage from '@/assets/70597799.jpg'
+import {useAuthStore} from '@/stores/auth'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'LogoutPage',
@@ -38,7 +40,11 @@ export default {
       avatarUrl: avatarImage, // 替换为实际图片路径
     });
 
+    const authStore = useAuthStore();
+    const router = useRouter();
+
     const logout = () => {
+      authStore.logout(router);
       console.log('登出当前账户');
     };
 
